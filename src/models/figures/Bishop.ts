@@ -12,4 +12,14 @@ export class Bishop extends Figures{
         this.logo = color === Colors.BLACK ? black : white;
         this.name = FiguresName.BISHOP;
     }
+
+    canMove(target: Cell): boolean {
+        if(!super.canMove(target)){
+            return false
+        }
+        if (this.cell.isEmptyDiagonal(target)){
+            return true
+        }
+        return false
+    }
 }

@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Board } from "../models/Board";
 import CellComponent from "./CellComponent";
+import { Cell } from "../models/Cell";
 
 interface BoardProps {
   board: Board;
@@ -8,12 +9,49 @@ interface BoardProps {
 }
 
 const BoardComponent: FC<BoardProps> = ({ board, setBoard }) => {
+  const [selectedCell, setSelectedCell] = React.useState<Cell | null>(null);
+
+  function click(cell: Cell){
+    if (
+      selectedCell &&
+      selectedCell !== cell &&
+      selectedCell.figure?.canMove(cell)
+    ) {
+      selectedCell.moveFigure(cell);
+      setSelectedCell(null);
+    } else {
+      setSelectedCell(cell);
+    }
+
+  };
+
+  React.useEffect(() => {
+    hihtlightCells();
+  }, [selectedCell]);
+
+  function hihtlightCells(){
+    board.hihtlightCells(selectedCell);
+    updateBoard();
+  };
+
+  const updateBoard = () => {
+    const newBoard = board.getCopyBoard();
+    setBoard(newBoard);
+  };
+
   return (
     <div className="board">
       {board.cells.map((row, index) => (
         <React.Fragment key={index}>
           {row.map((cell) => (
-            <CellComponent cell={cell} key={cell.id} />
+            <CellComponent
+              click={click}
+              cell={cell}
+              key={cell.id}
+              selected={
+                cell.x === selectedCell?.x && cell.y === selectedCell?.y
+              }
+            />
           ))}
         </React.Fragment>
       ))}
