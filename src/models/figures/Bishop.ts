@@ -6,7 +6,7 @@ import black from '../../assets/black-bishop.png'
 import white from '../../assets/white-bishop.png'
 
 
-export class Boshop extends Figures{
+export class Bishop extends Figures{
     constructor(color: Colors, cell: Cell){
         super(color, cell);
         this.logo = color === Colors.BLACK ? black : white;
